@@ -16,11 +16,13 @@ const app = express();
 
 app.use(
   cors({
-    origin: process.env.CLIENT_ORIGIN || "http://localhost:5173",
+    origin: true,
     credentials: true,
   })
 );
+
 app.use(cookieParser());
+
 // Generous body limit: profile photos, cover photos and resumes are sent as base64 data URLs.
 app.use(express.json({ limit: "15mb" }));
 app.use(express.urlencoded({ extended: true, limit: "15mb" }));
