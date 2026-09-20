@@ -1,23 +1,34 @@
 const crypto = require("crypto");
 
-// Public NFC token, e.g. "19DA73AEA06E5F08" - 16 uppercase hex characters.
+// Generate a unique NFC card token
 function generateCardToken() {
   return crypto.randomBytes(8).toString("hex").toUpperCase();
 }
 
-// A shorter, human-friendly identifier assigned to every card at creation time,
-// shown to the user as "Unique card ID" before the admin provisions the public URL.
+// Generate a human-readable card ID
 function generateCardId() {
   return `NFC-${crypto.randomBytes(5).toString("hex").toUpperCase()}`;
 }
 
+// Generate the public frontend URL
 function buildPublicUrl(token) {
-  const base = (process.env.PUBLIC_APP_URL || process.env.CLIENT_ORIGIN || "").replace(/\/$/, "");
-  return `${base}/c/${token}`;
+  const baseUrl = "https://nfc-card-frontend-two.vercel.app";
+
+  if (!token) {
+    throw new Error("Card token is required to generate public URL");
+  }
+
+  return `${baseUrl}/c/${token}`;
 }
 
+// Generate temporary password
 function generateTempPassword() {
   return crypto.randomBytes(6).toString("base64url");
 }
 
-module.exports = { generateCardToken, generateCardId, buildPublicUrl, generateTempPassword };
+module.exports = {
+  generateCardToken,
+  generateCardId,
+  buildPublicUrl,
+  generateTempPassword,
+};
